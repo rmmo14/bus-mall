@@ -51,10 +51,7 @@ figureElement.addEventListener('click', handleProdClick);
 function handleProdClick(event) {
   if (event.target.tagName === 'IMG') {
     tClicks++;
-    // this will remove event listener when reach max clicks allowed
-    if (tClicks === maxClicks) {
-      figureElement.removeEventListener('click', handleProdClick);
-    }
+    console.log(tClicks);
 
     var imgElement = event.targetAttribute('src');
     for (var i = 0; i < lineUp.length; i++) {
@@ -63,23 +60,58 @@ function handleProdClick(event) {
         lineUp[i].clicked++;
       }
     }
+    // this will remove event listener when reach max clicks allowed
+    if (tClicks === maxClicks) {
+      figureElement.removeEventListener('click', handleProdClick);
+    }
     renderProdImg();
   }
 }
 
-function renderProdImg(){
-  var firstProdImg = randomizer(0,lineUp.length);
-  var secondProdImg = randomizer(0,lineUp.length);
-  var thirdProdImg = randomizer(0,lineUp.length);
+function renderProdImg() {
+  var firstProdImg = randomizer(0, lineUp.length);
+  var secondProdImg = randomizer(0, lineUp.length);
+  var thirdProdImg = randomizer(0, lineUp.length);
 
   // use a loop to ensure 1st neq 2nd neq 3rd number to use for position of images
-  while (firstProdImg === secondProdImg || secondProdImg === thirdProdImg || firstProdImg === thirdProdImg){
+  while (firstProdImg === secondProdImg || secondProdImg === thirdProdImg || firstProdImg === thirdProdImg) {
     firstProdImg = randomizer(0, lineUp.length);
     secondProdImg = randomizer(0, lineUp.length);
   }
 }
 
+var leftImg = document.getElementById('leftimg');
+var leftTxt = document.getElementById('lefttext');
+var centerImg = document.getElementById('centerimg');
+var centerTxt = document.getElementById('centertext');
+var rightImg = document.getElementById('rightimg');
+var rightTxt = document.getElementById('righttext');
 
+var firstProduct = lineUp[firstProdImg];
+leftImg.src = firstProduct.imageSource;
+leftTxt.textContent = firstProduct.caption;
+firstProduct.shown++;
+
+var secondProduct = lineUp[secondProdImg];
+centerImg.src = secondProduct.imageSource;
+centerTxt.textContent = secondProduct.caption;
+secondProduct.shown++;
+
+var thirdProduct = lineUp[thirdProdImg];
+rightImg.src = thirdProduct.imageSource;
+rightTxt.textContent = thirdProduct.caption;
+thirdProduct.shown++;
+
+// The results 
+
+var resultsData = document.getElementById('clicks');
+var resultsHeader = document.createElement('h3');
+var resultsContent = document.createElement('li');
+
+resultsContent.textContent = 'Survey Says';
+resultsData.appendChild(resultsHeader);
+
+for (var i = 0; i < lineUp.length;)
 
 // ================ prompt 2 =============
 
