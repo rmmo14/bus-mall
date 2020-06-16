@@ -1,0 +1,13 @@
+* {
+  width: 960px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+h1 {
+  font-size: 48px;
+  display: inline-block;
+  margin-left: auto;
+  text-align: center;
+  margin-right: auto;
+}
