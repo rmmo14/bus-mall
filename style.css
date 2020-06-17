@@ -4,6 +4,11 @@
   margin-right: auto;
 }
 
+
+body {
+  background-color: lightpink;
+}
+
 h1 {
   font-size: 48px;
   display: inline-block;
@@ -26,10 +31,34 @@ section {
 }
 
 section > figure > img {
-  width: 310px;
+  width: 300px;
+  margin: 5px;
   float: left;
+  border: 3px solid blueviolet;
+  border-radius: 10px;
 }
 
 #righttext {
   height: 18px;
+}
+
+table {
+  border: 2px solid black;
+  width: 380px;
+  position: relative;
+  float: left;
+}
+
+#clicks {
+  width: 380px;
+}
+
+section > ul {
+  width: 500px;
+}
+
+#clicks > ul > li {
+  width: 300px;
+  margin-left: 50px;
+  display: inline-block;
 }
