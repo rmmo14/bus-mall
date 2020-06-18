@@ -228,15 +228,3 @@ function handleProdClick(event) {
 }
 
 // ============= lab 13 ========
-// local storage
-// need to store all data
-
-// function reRenderProd() {
-//   for (var i = 0; i < lineUpData.length; i++){
-//     var iCaption = lineUpData[i].caption;
-//     var iSrc = lineUpData[i].imageSrc;
-//     var nProd = new Produce ( iSrc, iCaption);
-//     nProd.clicked = lineUpData[i].clicked;
-//     nProd.shown = lineUpData[i].shown;
-//   }
-// }
