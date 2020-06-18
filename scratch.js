@@ -1,4 +1,4 @@
-var lineUp = [];
+// var lineUp = [];
 var tClicks = 0;
 var maxClicks = 5;
 var randomNumArray = [];
@@ -9,10 +9,11 @@ function Produce(imageSource, caption) {
   this.shown = 0;
   this.imageSrc = imageSource;
   this.caption = caption;
-  this.percent = 0;
-
-  lineUp.push(this);
+  // this.percent = 0;
+  Produce.lineUp.push(this);
+  // lineUp.push(this);
 }
+Produce.lineUp = [];
 
 new Produce('img/bag.jpg', 'R2D2 Bag');
 new Produce('img/banana.jpg', 'Banana Slicer');
@@ -40,7 +41,7 @@ new Produce('img/wine-glass.jpg', 'Wine');
 function randomizer(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1) + min);
+  return Math.floor(Math.random() * (max - min) + min);
 }
 
 // event listener
@@ -48,78 +49,58 @@ function randomizer(min, max) {
 var figureSection = document.getElementById('product-imgs');
 figureSection.addEventListener('click', handleProdClick);
 
-function handleProdClick(event) {
-  if (event.target.tagName === 'IMG') {
-    if (tClicks === maxClicks) {
-      figureSection.removeEventListener('click', handleProdClick);
-      showResults();
-      renderToTable();
-      renderToChart();
-    }
-
-    var targetSource = event.target.getAttribute('src');
-    for (var i = 0; i < lineUp.length; i++) {
-      if (lineUp[i].imageSrc === targetSource) {
-        lineUp[i].clicked++;
-      }
-    }
-    tClicks++;
-    renderRandImg();
-  }
-}
 
 // rendering random images
-
 function renderRandImg() {
-  var firstProdImg = randomizer(0, lineUp.length);
-  var secondProdImg = randomizer(0, lineUp.length);
-  var thirdProdImg = randomizer(0, lineUp.length);
+  var firstProdImg;
+  var secondProdImg;
+  var thirdProdImg;
 
-  while (firstProdImg === randomNumArray[0] || firstProdImg === randomNumArray[1] || firstProdImg === randomNumArray[2]) {
-    firstProdImg = randomizer(0, lineUp.length);
-  }
-
-  while (firstProdImg === secondProdImg || secondProdImg === randomNumArray[0] || secondProdImg === randomNumArray[1] || secondProdImg === randomNumArray[2]) {
-    secondProdImg = randomizer(0, lineUp.length);
-  }
-
-  while (firstProdImg === thirdProdImg || secondProdImg === thirdProdImg || thirdProdImg === randomNumArray[0] || thirdProdImg === randomNumArray[1] || thirdProdImg === randomNumArray[2]) {
-    thirdProdImg = randomizer(0, lineUp.length);
-  }
-
+  do {
+    secondProdImg = randomizer(0, Produce.lineUp.length);
+    do {
+      firstProdImg = randomizer(0, Produce.lineUp.length);
+    } while (firstProdImg === secondProdImg); // if first and second are the same then it goes back to line 62
+    do {
+      thirdProdImg = randomizer(0, Produce.lineUp.length);
+    } while (firstProdImg === thirdProdImg || secondProdImg === thirdProdImg);
+  } while (randomNumArray.includes(firstProdImg) || randomNumArray.includes(secondProdImg) || randomNumArray.includes(thirdProdImg));
   randomNumArray = [firstProdImg, secondProdImg, thirdProdImg];
+  //console.log('check if repeat: ', randomNumArray);
 
-  console.log('check if repeat: ', randomNumArray);
   // debugger;
+
   var leftImg = document.getElementById('leftimg');
   var leftTxt = document.getElementById('lefttext');
-  var leftOption = lineUp[firstProdImg];
+  var centImg = document.getElementById('centerimg');
+  var centTxt = document.getElementById('centertext');
+  var rightImg = document.getElementById('rightimg');
+  var rightTxt = document.getElementById('righttext');
+
+  var leftOption = Produce.lineUp[firstProdImg];
   leftImg.src = leftOption.imageSrc;
   leftTxt.textContent = leftOption.caption;
   leftOption.shown++;
 
-  var centImg = document.getElementById('centerimg');
-  var centTxt = document.getElementById('centertext');
-  centImg.src = lineUp[secondProdImg].imageSrc;
-  centTxt.textContent = lineUp[secondProdImg].caption;
-  lineUp[secondProdImg].shown++;
+  var midOption = Produce.lineUp[secondProdImg];
+  centImg.src = midOption.imageSrc;
+  centTxt.textContent = midOption.caption;
+  midOption.shown++;
 
-  var rightImg = document.getElementById('rightimg');
-  var rightTxt = document.getElementById('righttext');
-  rightImg.src = lineUp[thirdProdImg].imageSrc;
-  rightTxt.textContent = lineUp[thirdProdImg].caption;
-  lineUp[thirdProdImg].shown++;
+  var rightOption = Produce.lineUp[thirdProdImg];
+  rightImg.src = rightOption.imageSrc;
+  rightTxt.textContent = rightOption.caption;
+  rightOption.shown++;
 
 }
-
 
 // The results
 function showResults() {
   var resultsData = document.getElementById('clicks');
   var resultsList = document.createElement('ul');
-  for (var i = 0; i < lineUp.length; i++) {
+  for (var i = 0; i < Produce.lineUp.length; i++) {
     var resultsContent = document.createElement('li');
-    resultsContent.textContent = lineUp[i].caption + ' - shown: ' + lineUp[i].shown + ' , clicked: ' + lineUp[i].clicked;
+    resultsContent.textContent = Produce.lineUp[i].caption + ' - shown: ' + Produce.lineUp[i].shown + ' , clicked: ' + Produce.lineUp[i].clicked;
     resultsList.appendChild(resultsContent);
     resultsData.appendChild(resultsList);
   }
@@ -128,26 +109,31 @@ function showResults() {
 // Render to Table
 function renderToTable() {
   var dataTable = document.getElementById('data');
-  // var tHeaderArray = ['Product', 'Clicked', 'Shown'];
-  // for (var i = 0; i < tHeaderArray.length; i++) {
-  //   var tRow = document.createElement('tr');
-  //   var tHeader = document.createElement('th');
-  //   tHeader.textContent = tHeaderArray[i];
-  //   tRow.appendChild(tHeader);
-  // }
-  // console.log(tRow);
+  var tHeader = document.createElement('thead');
+  var pCell = document.createElement('th');
+  var cCell = document.createElement('th');
+  var sCell = document.createElement('th');
 
-  for (var i = 0; i < this.lineUp.length; i++) {
+  pCell.textContent = 'Product';
+  cCell.textContent = 'Shown';
+  sCell.textContent = 'Clicks';
+  tHeader.appendChild(pCell);
+  tHeader.appendChild(cCell);
+  tHeader.appendChild(sCell);
+
+  dataTable.appendChild(tHeader);
+
+  for (var i = 0; i < this.Produce.lineUp.length; i++) {
     var tRow = document.createElement('tr');
     var tCell = document.createElement('td');
-    tCell.textContent = this.lineUp[i].caption;
+    tCell.textContent = this.Produce.lineUp[i].caption;
     tRow.appendChild(tCell);
     tCell = document.createElement('td');
-    tCell.textContent = this.lineUp[i].clicked;
+    tCell.textContent = this.Produce.lineUp[i].shown;
     tRow.appendChild(tCell);
     dataTable.appendChild(tRow);
     tCell = document.createElement('td');
-    tCell.textContent = this.lineUp[i].shown;
+    tCell.textContent = this.Produce.lineUp[i].clicked;
     tRow.appendChild(tCell);
     dataTable.appendChild(tRow);
   }
@@ -161,22 +147,16 @@ function renderToTable() {
 
 // ================lab 12 ===================
 
-// ============ prompt 1 =============
-// update algorithm to not allow duplicates between consecutive clicks.
-
-// need to add an array that will hold the images displayed then test the next values for any of those numbers used previously
-
-// add canvas element chart
 
 function renderToChart() {
   var productNames = [];
   var productClicks = [];
   var productShown = [];
 
-  for (var i = 0; i < lineUp.length; i++) {
-    productNames.push(lineUp[i].caption);
-    productClicks.push(lineUp[i].clicked);
-    productShown.push(lineUp[i].shown);
+  for (var i = 0; i < Produce.lineUp.length; i++) {
+    productNames.push(Produce.lineUp[i].caption);
+    productClicks.push(Produce.lineUp[i].clicked);
+    productShown.push(Produce.lineUp[i].shown);
   }
 
   var ctx = document.getElementById('data-display').getContext('2d');
@@ -211,3 +191,38 @@ function renderToChart() {
     }
   });
 }
+
+function handleProdClick(event) {
+  if (event.target.tagName === 'IMG') {
+    if (tClicks === maxClicks) {
+      figureSection.removeEventListener('click', handleProdClick);
+      showResults();
+      renderToTable();
+      renderToChart();
+      console.log(Produce.lineUp);
+    }
+
+    var targetSource = event.target.getAttribute('src');
+    for (var i = 0; i < Produce.lineUp.length; i++) {
+      if (Produce.lineUp[i].imageSrc === targetSource) {
+        Produce.lineUp[i].clicked++;
+      }
+    }
+
+    // var stringyLineUp = JSON.stringify(Produce.lineUp);
+    // localStorage.setItem('store-c-s', stringyLineUp);
+
+    tClicks++;
+    renderRandImg();
+  }
+}
+
+// ============= lab 13 ========
+// local storage
+// need to store all data
+// var stringyLineUpData = localStorage.getItem('store-c-s');
+// var lineUpData = JSON.stringify(stringyLineUpData);
+
+// if (lineUpData){
+//   Produce.lineUp = stringyLineUpData;
+// }
