@@ -15,6 +15,7 @@ function Produce(imageSource, caption) {
 }
 Produce.lineUp = [];
 
+
 new Produce('img/bag.jpg', 'R2D2 Bag');
 new Produce('img/banana.jpg', 'Banana Slicer');
 new Produce('img/bathroom.jpg', 'Ipad Stand');
@@ -35,6 +36,15 @@ new Produce('img/unicorn.jpg', 'Uni Meat');
 new Produce('img/usb.gif', 'USB');
 new Produce('img/water-can.jpg', 'Water Can');
 new Produce('img/wine-glass.jpg', 'Wine');
+
+// local storage
+var stringyLineUpData = localStorage.getItem('store-c-s');
+var lineUpData = JSON.parse(stringyLineUpData);
+console.log(lineUpData);
+if (lineUpData) {
+  Produce.lineUp = lineUpData;
+}
+renderRandImg();
 
 // Randomizer
 
@@ -209,20 +219,24 @@ function handleProdClick(event) {
       }
     }
 
-    // var stringyLineUp = JSON.stringify(Produce.lineUp);
-    // localStorage.setItem('store-c-s', stringyLineUp);
 
     tClicks++;
     renderRandImg();
   }
+  var stringyLineUp = JSON.stringify(Produce.lineUp);
+  localStorage.setItem('store-c-s', stringyLineUp);
 }
 
 // ============= lab 13 ========
 // local storage
 // need to store all data
-// var stringyLineUpData = localStorage.getItem('store-c-s');
-// var lineUpData = JSON.stringify(stringyLineUpData);
 
-// if (lineUpData){
-//   Produce.lineUp = stringyLineUpData;
+// function reRenderProd() {
+//   for (var i = 0; i < lineUpData.length; i++){
+//     var iCaption = lineUpData[i].caption;
+//     var iSrc = lineUpData[i].imageSrc;
+//     var nProd = new Produce ( iSrc, iCaption);
+//     nProd.clicked = lineUpData[i].clicked;
+//     nProd.shown = lineUpData[i].shown;
+//   }
 // }
