@@ -1,6 +1,6 @@
 // var lineUp = [];
 var tClicks = 0;
-var maxClicks = 5;
+var maxClicks = 25;
 var randomNumArray = [];
 
 
@@ -228,3 +228,4 @@ function handleProdClick(event) {
 }
 
 // ============= lab 13 ========
+
